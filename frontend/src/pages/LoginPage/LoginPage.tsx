@@ -2,8 +2,17 @@ import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import HomeIcon from '@mui/icons-material/Home';
+import { useState } from 'react';
 
 export default function LoginPage() {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const btnLogin = () => {
+    console.log(email, password);
+  }
+
   return (
     <Box
       sx={{
@@ -73,12 +82,12 @@ export default function LoginPage() {
           component="form"
           sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}
         >
-          <TextField label="Username or Email" required fullWidth />
-          <TextField label="Password" type="password" required fullWidth />
+          <TextField label="Username or Email" required fullWidth value={email} onChange={(e) => setEmail(e.target.value)} />
+          <TextField label="Password" type="password" required fullWidth value={password} onChange={(e) => setPassword(e.target.value)} />
 
           <Button
             component={Link}
-            to="/home"
+            to=""
             variant="contained"
             color="primary"
             fullWidth
@@ -89,6 +98,8 @@ export default function LoginPage() {
               borderRadius: 2,
               '&:hover': { backgroundColor: '#1565c0' },
             }}
+           onClick={btnLogin}
+
           >
             Login
           </Button>
