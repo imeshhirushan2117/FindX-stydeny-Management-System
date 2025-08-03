@@ -31,7 +31,7 @@ class AuthController extends Controller
         ]);
     }
 
-     //user login
+    //user login
     public function login(Request $request)
     {
         $request->validate([
@@ -52,4 +52,14 @@ class AuthController extends Controller
             'user' => $user
         ]);
     }
+
+    //logout
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'message' => 'Logged out successfully',
+        ])->setStatusCode(200, 'OK');
+    }
+
 }
