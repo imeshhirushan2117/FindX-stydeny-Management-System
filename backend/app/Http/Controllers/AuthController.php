@@ -62,4 +62,8 @@ class AuthController extends Controller
         ])->setStatusCode(200, 'OK');
     }
 
+    public function user(Request $request)
+    {
+        return response()->json($request->user());
+    }
 }
