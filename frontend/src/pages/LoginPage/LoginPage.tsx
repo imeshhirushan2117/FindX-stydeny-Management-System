@@ -13,22 +13,22 @@ export default function LoginPage() {
 
 
   const btnLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('/login', {
-        email,
-        password
-      });
+    // e.preventDefault();
+    // try {
+    //   const res = await axios.post('/login', {
+    //     email,
+    //     password
+    //   });
 
-      localStorage.setItem('token', res.data.token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-      const userRes = await axios.get('/user');
-      console.log("Logged in as:", userRes.data);
-      navigate('/home');
-    } catch (error) {
-      alert("Login failed. Please check your credentials.");
-    }
-
+    //   localStorage.setItem('token', res.data.token);
+    //   axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+    //   const userRes = await axios.get('/user');
+    //   console.log("Logged in as:", userRes.data);
+    //   navigate('/home');
+    // } catch (error) {
+    //   alert("Login failed. Please check your credentials.");
+    // }
+navigate('/home');
   }
 
   return (
