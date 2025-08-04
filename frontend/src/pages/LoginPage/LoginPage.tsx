@@ -1,16 +1,34 @@
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import HomeIcon from '@mui/icons-material/Home';
 import { useState } from 'react';
+import axios from '../../api.js';
 
 export default function LoginPage() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const btnLogin = () => {
-    console.log(email, password);
+
+  const btnLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post('/login', {
+        email,
+        password
+      });
+
+      localStorage.setItem('token', res.data.token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+      const userRes = await axios.get('/user');
+      console.log("Logged in as:", userRes.data);
+      navigate('/home');
+    } catch (error) {
+      alert("Login failed. Please check your credentials.");
+    }
+
   }
 
   return (
@@ -98,7 +116,7 @@ export default function LoginPage() {
               borderRadius: 2,
               '&:hover': { backgroundColor: '#1565c0' },
             }}
-           onClick={btnLogin}
+            onClick={btnLogin}
 
           >
             Login
