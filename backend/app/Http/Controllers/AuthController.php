@@ -17,12 +17,14 @@ class AuthController extends Controller
             'name' => 'required | string | max:255',
             'email' => 'required | email | string |unique:users',
             'password' => 'required | string | max:10 | confirmed',
+            'contact' => 'required | string | max:50 ',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'contact' => $request->contact,
         ]);
 
         return response()->json([

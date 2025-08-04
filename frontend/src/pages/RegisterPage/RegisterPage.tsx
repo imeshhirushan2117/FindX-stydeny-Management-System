@@ -1,9 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
+import axios from '../../api.js'
 
 export default function RegisterPage() {
+
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [contact, setContact] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+
+
+  const btnRegister = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('/register', {
+        email,
+        password,
+        passwordConfirmation,
+        name,
+        contact
+      });
+      alert("Registration successful! Please login.");
+      navigate('/');
+
+    } catch (err) {
+      if (err.response?.data?.errors) {
+        const errors = err.response.data.errors;
+        const errorMessages = Object.values(errors).flat().join('\n');
+        alert(errorMessages);
+      } else {
+        alert('Registration failed. Try again.');
+      }
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -45,10 +80,11 @@ export default function RegisterPage() {
         </Typography>
 
         <Box component="form" sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <TextField label="Full Name" type="text" required fullWidth />
-          <TextField label="Email" type="email" required fullWidth />
-          <TextField label="Password" type="password" required fullWidth />
-          <TextField label="Contact Number" type="tel" fullWidth />
+          <TextField label="Full Name" type="text" required fullWidth value={name} onChange={(e) => setName(e.target.value)} />
+          <TextField label="Email" type="email" required fullWidth value={email} onChange={(e) => setEmail(e.target.value)} />
+          <TextField label="Contact Number" type="tel" fullWidth value={contact} onChange={(e) => setContact(e.target.value)} />
+          <TextField label="Password" type="password" required fullWidth value={password} onChange={(e) => setPassword(e.target.value)} />
+          <TextField label="Password Confirmation" type="password" required fullWidth value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} />
 
           <Button
             component={Link}
@@ -63,6 +99,8 @@ export default function RegisterPage() {
               borderRadius: 2,
               '&:hover': { backgroundColor: '#1565c0' },
             }}
+
+            onClick={btnRegister}
           >
             Register
           </Button>
