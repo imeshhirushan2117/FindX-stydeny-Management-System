@@ -25,5 +25,10 @@ class StudentController extends Controller
         return Student::create($validatedData);
     }
 
-    
+    public function update(Request $request,  $id)
+    {
+        $student = Student::findOrFail($id);
+        $student->update($request->all());
+        return response()->json($student, 200);
+    }
 }
