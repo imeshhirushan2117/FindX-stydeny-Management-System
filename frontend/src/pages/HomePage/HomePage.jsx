@@ -35,6 +35,10 @@ export default function HomePage() {
   const [city, setCity] = useState('');
   const [contactNumber, setContactNumber] = useState('');
 
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editId, setEditId] = useState(null);
+
+
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'name', headerName: 'Name', width: 150 },
@@ -70,6 +74,17 @@ export default function HomePage() {
       ),
     },
   ];
+
+  const handleEdit = (row) => {
+    setName(row.name);
+    setEmail(row.email);
+    setBirthdate(row.birthdate);
+    setCity(row.city);
+    setContactNumber(row.contact_number);
+    setEditId(row.id);
+    setIsEditMode(true);
+    setPopup(true);
+  };
 
 
   const handleDelete = (id) => {
@@ -117,9 +132,10 @@ export default function HomePage() {
     setAnchorEl(null);
   };
 
-  const logout = () => {
+  const logout = async () => {
+   
+  }
 
-  };
   const saveStudent = () => {
     axios.post('/students', {
       name,
@@ -142,7 +158,34 @@ export default function HomePage() {
       });
   }
 
+  const updateStudent = () => {
+    axios.put(`/students/${editId}`, {
+      name,
+      email,
+      birthdate,
+      city,
+      contact_number: contactNumber
+    })
+      .then((response) => {
+        setRows(rows.map((row) => row.id === editId ? { id: editId, ...response.data } : row));
+        resetForm(); // Close modal and reset form
+      })
+      .catch((error) => {
+        console.error('Error updating student:', error);
+      });
+  };
 
+
+  const resetForm = () => {
+    setName('');
+    setEmail('');
+    setBirthdate('');
+    setCity('');
+    setContactNumber('');
+    setEditId(null);
+    setIsEditMode(false);
+    setPopup(false);
+  };
 
   return (
     <>
@@ -218,7 +261,7 @@ export default function HomePage() {
         />
       </Box>
 
-      <PopUPModel
+      {/* <PopUPModel
         open={popup}
         onClose={() => setPopup(false)}
         title="Add New Student"
@@ -232,7 +275,29 @@ export default function HomePage() {
             </Button>
           </>
         }
+      > */}
+
+      <PopUPModel
+        open={popup}
+        onClose={() => resetForm()}
+        title={isEditMode ? 'Update Student' : 'Add New Student'}
+        actions={
+          <>
+            <Button onClick={() => resetForm()} color="error">
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={isEditMode ? updateStudent : saveStudent}
+            >
+              {isEditMode ? 'Update' : 'Save'}
+            </Button>
+          </>
+        }
       >
+
+
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField label="Name" fullWidth margin="normal" value={name} onChange={(e) => setName(e.target.value)} />
