@@ -21,6 +21,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import PopUPModel from '../../components/PopupModel/PopUPModel';
 import React, { useEffect, useState } from 'react';
 import axios from '../../api.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function HomePage() {
   const [auth, setAuth] = React.useState(true);
@@ -38,6 +39,7 @@ export default function HomePage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
 
+  const navigate = useNavigate();
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -133,7 +135,16 @@ export default function HomePage() {
   };
 
   const logout = async () => {
+    try {
+      await axios.post('/logout');
+      setAuth(false);
+      setAnchorEl(null);
+            navigate('/login');
    
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+    
   }
 
   const saveStudent = () => {
