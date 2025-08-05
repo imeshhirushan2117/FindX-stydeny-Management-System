@@ -24,4 +24,6 @@ class StudentController extends Controller
 
         return Student::create($validatedData);
     }
+
+    
 }
