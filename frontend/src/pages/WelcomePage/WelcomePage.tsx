@@ -36,7 +36,7 @@ export default function WelcomePage() {
             fontSize: { xs: '2rem', sm: '2.5rem' },
           }}
         >
-          Welcome!
+          Welcome S.M SYSTEM !
         </Typography>
 
         <Typography
